@@ -97,6 +97,41 @@ const DinoGame: React.FC = () => {
     return types[Math.floor(Math.random() * types.length)];
   };
 
+  // Add function to generate initial obstacles and coins
+  const generateInitialElements = () => {
+    // Generate 2-3 initial obstacles at different distances
+    const initialObstacles: ObstacleObject[] = [];
+    for (let i = 0; i < 2 + Math.floor(Math.random() * 2); i++) {
+      const obstacleType = generateObstacleType();
+      let height = Math.floor(Math.random() * 30) + 30; // Random height between 30-60px
+      
+      if (obstacleType === 'bird') {
+        height = 20;
+      }
+      
+      initialObstacles.push({
+        id: Date.now() + i,
+        x: 800 + (i * 400), // Spaced out along the course
+        width: Math.floor(Math.random() * 20) + 20, // Random width between 20-40px
+        height,
+        type: obstacleType
+      });
+    }
+    setObstacles(initialObstacles);
+    
+    // Generate 1-2 initial coins
+    const initialCoins: CoinObject[] = [];
+    for (let i = 0; i < 1 + Math.floor(Math.random() * 2); i++) {
+      initialCoins.push({
+        id: Date.now() + 100 + i, // Different ID range than obstacles
+        x: 1000 + (i * 350), // Spaced out differently than obstacles
+        y: Math.floor(Math.random() * 80) + 20, // Random height between 20-100px
+        collected: false
+      });
+    }
+    setCoinObjects(initialCoins);
+  };
+
   // Game loop
   const gameLoop = (timestamp: number) => {
     if (!lastObstacleTime.current) {
@@ -248,6 +283,9 @@ const DinoGame: React.FC = () => {
     lastObstacleTime.current = 0;
     lastCoinTime.current = 0;
     gameSpeed.current = 5;
+    
+    // Generate initial obstacles and coins
+    generateInitialElements();
     
     animationFrameId.current = requestAnimationFrame(gameLoop);
     toast({
