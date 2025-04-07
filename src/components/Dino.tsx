@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface DinoProps {
   position: {
@@ -10,6 +10,19 @@ interface DinoProps {
 }
 
 const Dino: React.FC<DinoProps> = ({ position, isGameOver }) => {
+  const [runningFrame, setRunningFrame] = useState(0);
+  
+  // Running animation effect
+  useEffect(() => {
+    if (isGameOver) return;
+    
+    const runningInterval = setInterval(() => {
+      setRunningFrame((prev) => (prev === 0 ? 1 : 0));
+    }, 200); // Toggle between frames every 200ms
+    
+    return () => clearInterval(runningInterval);
+  }, [isGameOver]);
+
   // Dinosaur character styles
   const dinoStyle: React.CSSProperties = {
     position: 'absolute',
@@ -18,7 +31,7 @@ const Dino: React.FC<DinoProps> = ({ position, isGameOver }) => {
     width: '30px', 
     height: '30px',
     transition: position.isJumping ? 'none' : 'transform 0.1s',
-    transform: isGameOver ? 'rotate(90deg)' : 'none',
+    transform: isGameOver ? 'rotate(90deg)' : (position.isJumping ? 'none' : `translateY(${runningFrame * 2}px)`),
   };
 
   return (
@@ -35,9 +48,9 @@ const Dino: React.FC<DinoProps> = ({ position, isGameOver }) => {
         <rect x="10" y="20" width="20" height="5" fill="black" />
         <rect x="5" y="25" width="10" height="5" fill="black" />
         <rect x="20" y="25" width="10" height="5" fill="black" />
-        <rect x="5" y="30" width="5" height="5" fill="black" />
-        <rect x="15" y="30" width="5" height="5" fill="black" />
-        <rect x="25" y="30" width="5" height="5" fill="black" />
+        <rect x="5" y="30" width="5" height="5" fill={position.isJumping || isGameOver || runningFrame === 0 ? "black" : "transparent"} />
+        <rect x="15" y="30" width="5" height="5" fill={position.isJumping || isGameOver || runningFrame === 1 ? "black" : "transparent"} />
+        <rect x="25" y="30" width="5" height="5" fill={position.isJumping || isGameOver || runningFrame === 0 ? "black" : "transparent"} />
       </svg>
     </div>
   );
