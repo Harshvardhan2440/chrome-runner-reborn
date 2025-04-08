@@ -9,6 +9,11 @@ const Ground: React.FC<GroundProps> = ({ gameSpeed }) => {
   // Animation speed based on game speed
   const animationDuration = 1000 / gameSpeed;
   
+  // Add this to ensure the animation style is defined
+  const groundAnimationStyle = {
+    animation: `groundMovement ${animationDuration}ms linear infinite`,
+  };
+  
   return (
     <div className="absolute bottom-0 w-full h-[20px] overflow-hidden">
       <div 
@@ -20,7 +25,7 @@ const Ground: React.FC<GroundProps> = ({ gameSpeed }) => {
         style={{
           backgroundImage: 'linear-gradient(to right, #000 0%, #000 15%, transparent 15%, transparent 20%, #000 20%, #000 35%, transparent 35%, transparent 40%, #000 40%, #000 55%, transparent 55%, transparent 60%, #000 60%, #000 75%, transparent 75%, transparent 80%, #000 80%, #000 95%, transparent 95%, transparent 100%)',
           backgroundSize: '120px 5px',
-          animation: `groundMovement ${animationDuration}ms linear infinite`,
+          ...groundAnimationStyle
         }}
       />
     </div>
