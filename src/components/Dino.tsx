@@ -31,7 +31,7 @@ const Dino: React.FC<DinoProps> = ({ position, isGameOver }) => {
     width: '30px', 
     height: '30px',
     transition: position.isJumping ? 'none' : 'transform 0.1s',
-    transform: isGameOver ? 'rotate(90deg)' : (position.isJumping ? 'none' : `translateY(${runningFrame * 2}px)`),
+    transform: isGameOver ? 'rotate(90deg)' : (runningFrame === 1 && !position.isJumping ? 'translateY(2px)' : 'none'),
   };
 
   return (
